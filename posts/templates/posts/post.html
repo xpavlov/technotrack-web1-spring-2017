@@ -1,0 +1,46 @@
+{% extends "core/base.html" %}
+
+{% block title %}
+    <h1>{{ post.title }}</h1>
+    <br><p style="text-align: left; font-size: 8pt; color: darkgray">{{ object.date }}</p> {% endblock %}
+
+{% block content %}
+    <p style="text-align: justify; font-size: 14pt; color: black">
+        {{ post.text }}
+    </p>
+
+    {% if post.comment_set.count %}
+        <table class="table">
+        <tbody>
+        <tr>
+            <th><h2>Comments:</h2></th>
+        </tr>
+        {% for comment in post.comment_set.all %}
+            <tr>
+                <td>
+                    <table align="left" cellspacing="2">
+                        <tr>
+                            <td><i>{{ comment.author }}</i> said on {{ comment.date }}</td>
+                        </tr>
+                        <tr>
+                            <td>{{ comment.text }}</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        {% endfor %}
+    {% else %}
+        <h1 align="center">There is no comments yet</h1>
+    {% endif %}
+</tbody>
+</table>
+    {% if user.is_authenticated %}
+        <form method='post'>
+            {% csrf_token %}
+            {{ form }}
+            <input type='submit' class="btn" value="Leave comment!">
+        </form>
+        {% else %}
+        <h3>Login to leave comments</h3>
+    {% endif %}
+{% endblock %}

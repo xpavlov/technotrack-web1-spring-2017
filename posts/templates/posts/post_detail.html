@@ -1,0 +1,39 @@
+{% extends "core/base.html" %}
+
+{% block title %}
+    <br><h2><a href="{% url "blogs:blogs_list" %}">To all blogs</a></h2>
+    <h1>{{ object.title }}</h1>
+    <br><p style = "text-align: left; font-size: 8pt; color: darkgray">{{ object.date }}</p> {% endblock %}
+
+{% block content %}
+    <p style="text-align: justify; font-size: 14pt; color: black">
+    {{ object.text }}
+    </p>
+    <hr size="2">
+
+    <table align="left>" cellspacing = 5>
+    {% if objects.comment_set.count %}
+    <tr><th><h2>Comments:</h2></th></tr>
+    {% for comment in objects.comment_set.all %}
+        <tr><td>
+        <table class="table">
+            <tr><td><i>{{ comment.author }}</i> said on {{ comment.date }}</td></tr>
+            <tr><td>{{ comment.text }}</td></tr>
+        </table>
+        </td>
+        </tr>
+    {% endfor %}
+    {%  else %}
+        <h1 align="center">There is no comments yet</h1>
+    {% endif %}
+    {% if user.is_authenticated %}
+    <tr><td><form method = 'post'>
+        {%  csrf_token %}
+        {{ form }}
+        <input type = 'submit' class="btn-block" value="Comment!">
+        </form>
+    </td></tr>
+    {% endif  %}
+    </table>
+
+{% endblock %}

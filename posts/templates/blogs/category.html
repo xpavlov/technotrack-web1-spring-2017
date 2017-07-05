@@ -1,0 +1,25 @@
+{% extends "core/base.html" %}
+{% block title %}<h1><i>{{ object.name }}'s</i> tagged blogs:</h1>{% endblock %}
+{% block content %}
+    {% if object.blog_set.count %}
+        <table class="table">
+        <tr><th>Name</th><th>Action</th><th>Blog count</th></tr>
+            {% for blog in object.blog_set.all %}
+                <tr>
+                    <td><a href='{% url "blogs:one_blog" pk=blog.id %}'>{{ blog.title }}</a></td><td>
+                        {% if blog.owner == user %}
+                            <a href='{% url "blogs:edit_blog" pk=blog.id %}'>
+                                Edit</a>
+                        {% endif %}
+                    </td>
+                    <td>
+                    {{ blog.date }}
+                    <td>{{ blog.owner }}</td>
+                    <td>Posts: {{ blog.post_set.count }} </td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <h1 class="panel-body">There is no blogs yet</h1>
+    {% endif %}
+{% endblock %}

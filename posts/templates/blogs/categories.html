@@ -1,0 +1,19 @@
+{% extends "core/base.html" %}
+{% block title %}<h1>All categories:</h1>{% endblock %}
+{% block content %}
+    {% if object_list.count %}
+        <table class ="table">
+        <tbody>
+            {% for category in object_list %}
+                <tr>
+                    <td><a href='{% url "blogs:one_category" pk=category.id %}'>{{ category.title }}</a></td>
+                    <td><b>Blogs:</b>{{ category.blog_set.count }}</td>
+                    <td>{{ category.date }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+        </table>
+    {% else %}
+        <h1 align="center">There is no categories yet</h1>
+    {% endif %}
+{% endblock %}

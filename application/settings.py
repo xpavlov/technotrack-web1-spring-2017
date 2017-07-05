@@ -11,6 +11,10 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 """
 
 import os
+from ConfigParser import RawConfigParser
+
+config = RawConfigParser()
+config.read('/home/osboxes/technotrack/conf/django.conf')
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -20,12 +24,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'nn)h7mf6f@r9^k=1cc($n)&6$7m79yz5qncskn6)_wel5ab5g7'
+SECRET_KEY = config.get('main','secret_key')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -37,6 +41,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    "widget_tweaks",
+    'core.apps.CoreConfig',
+    'posts.apps.PostsConfig'
 ]
 
 MIDDLEWARE = [
@@ -76,9 +83,9 @@ WSGI_APPLICATION = 'application.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'technotrack',
-	'USER': 'technotrack',
-	'PASSWORD':'technotrack2017'
+        'NAME': config.get('database','dbname'),
+	'USER': config.get('database','user'),
+	'PASSWORD':config.get('database','password')
     }
 }
 
@@ -119,4 +126,33 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
-STATIC_URL = '/static/'
+STATIC_URL = config.get('main','static_dir')
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static")]
+
+#AUTH_USER_MODEL = 'core.User'
+
+LOGIN_URL = 'core:login'
+LOGOUT_URL = 'core:logout'
+LOGIN_REDIRECT_URL = 'core:index'
+LOGOUT_REDIRECT_URL = 'core:index'
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': '/home/osboxes/technotrack/django.log',
+        },
+    },
+    'loggers': {
+        'posts': {
+            'handlers': ['file'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+    },
+}

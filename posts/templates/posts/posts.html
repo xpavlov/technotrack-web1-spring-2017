@@ -1,0 +1,37 @@
+{% extends "core/base.html" %}
+
+{% block title %}
+    <div class="row">
+        <div class="col-md-10 col-xs-12">
+            <h1>{{ object.title }} by <i>{{ object.owner }}</i></h1></div>
+        <div class="col-md-2 col-xs-12">
+            <a href='{% url "blogs:edit_blog" pk=object.id %}'>Edit</a></div>
+    </div>
+{% endblock %}
+{% block content %}
+    {% if object.owner == user %}
+        <div class="row">
+            <a href='{% url "blogs:add_post" pk=object.id %}'>
+                New post</a></div>
+    {% endif %}
+    <div class="col-md-12 col-lg-12 blog" data-url="{% url "blogs:blog_likes" pk=object.id %}"></div>
+    {% if object.post_set.all.count %}
+        {% for post in object.post_set.all %}
+            <div class="row" >
+                <div><a href="{% url "blogs:one_post" pk=post.id %}">{{ post.title }}</a></div>
+                <div class="col-md-3 col-lg-2 col-xs-12">{{ post.date }}</div>
+                <div class="col-md-3 col-lg-2 col-xs-12"><i>Comments: {{ post.comment_set.count }}</i></div>
+                <div class="col-md-3 col-lg-2 col-xs-12"><i>
+                    <span id="likes-{{ post.id }}" class="like" data-url="{% url "blogs:post_ajax_like" pk=post.id %}" data-postid="{{ post.id }}">Количество лайков поста</span>
+                    <button class="btn ajaxlike" data-url="{% url "blogs:post_ajax_like" pk=post.id %}"
+                            data-postid="{{ post.id }}">Лайкнуть
+                    </button>
+                </i>
+                </div>
+            </div>
+            <br>
+        {% endfor %}
+    {% else %}
+        <h1 align="center">There is no posts yet</h1>
+    {% endif %}
+{% endblock %}

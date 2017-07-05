@@ -1,0 +1,60 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Django demo blog app</title>
+    <link rel="stylesheet" href="{% static "/css/bootstrap.css" %}">
+    <link rel="stylesheet" href="{% static "/css/blog.css" %}">
+
+    <meta name="csrf" content="{{ csrf_token }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+<div class="container-fluid">
+    <header>
+        {% block header %}
+            <div class="row page-header text-center">
+                <div class="row">
+                    {% if user.is_authenticated %}
+                        <div class="col-lg-6 col-md-6 col-xs-12"><h3>You are logged as <i>{{ user }}</i></h3></div><div class="col-lg-6 col-md-6 col-xs-12"><a
+                                href="{% url "core:logout" %}">Logout</a></div>
+                    {% else %}
+                        <div class="col-lg-6 col-md-6 col-xs-12">
+                            <h3>You are <i>not</i> logged in.</h3>
+                        </div>
+                        <div class="col-lg-6 col-md-8 col-xs-12"><a href="{% url "core:login" %}">Login</a></div></div>
+                    {% endif %}
+            </div>
+        {% endblock %}
+    </header>
+    <nav>{% block navbar %}
+        <div class="row  text-center">
+            <div class="col-xs-12 col-md-3 col-lg-2"><a href="{% url "core:index" %}">Main page</a></div>
+            <div class="col-xs-12 col-md-3 col-lg-2"><a href={% url "blogs:blogs_list" %}>All blogs</a></div>
+            <div class="col-xs-12 col-md-3 col-lg-2"><a href="/blogs/categories/">All categories</a><br></div>
+            <div class="col-xs-12 col-md-3 col-lg-2"><a href="/admin/">Admin panel</a></div>
+            {% if user.is_authenticated %}
+                <div class="col-xs-12 col-md-1 col-lg-2"><a href="{% url "blogs:new_blog" %}">Create new blog</a>
+                </div>{% endif %}
+        </div>
+    {% endblock %}</nav>
+    <article>
+        <div class="row">
+            <div class="text-center">{% block title %}{% endblock %}
+            </div>
+        </div>
+        <div class="panel-body">{% block content %} {% endblock %}</div>
+    </article>
+    <footer>
+        {% block footer %}
+            <div class="row">
+            <div class="col-lg-12 col-md-12 col-xs-12" id="footer">
+                <div class="row panel-footer"><span class="center-block">This demo app is powered by Django</span></div>
+            </div>{% endblock %}
+    </footer>
+</div>
+<script src="{% static "/js/jquery-3.2.0.min.js" %}"></script>
+<script src="{% static "/js/bootstrap.js" %}"></script>
+<script src="{% static "js/base.js" %}"></script>
+</body>
+</html>

@@ -1,0 +1,13 @@
+{% extends "core/base.html" %}
+{% block title %}<h1>New post:</h1>{% endblock %}
+{% block content %}
+    <table align="center">
+    <tr><td>
+        <form method='POST'>
+        {% csrf_token %}
+        {{ form.as_ul }}
+        <input type="submit" value="Add post">
+        </form>
+    </td></tr>
+    </table>
+{% endblock %}

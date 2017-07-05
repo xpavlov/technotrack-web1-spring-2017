@@ -1,0 +1,15 @@
+{% extends "core/base.html" %}
+{% load widget_tweaks %}
+{% block title %}<h1>Add new blog:</h1>{% endblock %}
+{% block content %}
+    <div class="row">
+        <form method="POST" action="{% url "blogs:new_blog" %}">
+            {% csrf_token %}
+            <div class="col-md-6 col-xs-12">Category:</div>
+            <div class="col-md-6 col-xs-12">{{ form.category }}</div>
+            <div class="col-md-6 col-xs-12">Description:</div>
+            <div class="col-md-6 col-xs-12"> {{ form.description | add_class:"text-area" }}</div>
+            <div class="col-md-6 col-xs-12 col-md-offset-6"><input type="submit" class="btn" label="Apply!"></div>
+        </form>
+    </div>
+{% endblock %}
